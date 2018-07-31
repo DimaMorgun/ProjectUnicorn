@@ -35,6 +35,8 @@ namespace Angular_View
             }
 
             app.UseMvc();
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
         }
     }
 }
