@@ -20,6 +20,8 @@
 </PropertyGroup>
 ```
 
-# Good luck, Have fun :3
+- [x] Good luck.
+- [X] Have fun.
+- [ ] 50 shades of exception :3
 
 ###### Secret project with open source code :3
