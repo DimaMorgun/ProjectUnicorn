@@ -8,7 +8,7 @@
 > This guide may not work in future version Angular or ASP.NET Core versions.
 > You can use your favourite guide.
 3. If you have got 0 exceptions after install Angular, you can add Electron.NET to your project.
-> Electron can build your web application like `Stand Alone`.
+> Electron can build your web application like `Stand Alone Desktop Application`.
 4. You can use this [Electron.NET Step-by-Step Guide](http://www.cross-platform-blog.com/electron.net/electron.net-musicplayer-app-with-asp.net-core/) for install electron to your project.
 # Before you start build your application using Electron.NET
 ## Check you'r .csproj file and remove angular build string from this code block.
