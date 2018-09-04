@@ -1,11 +1,11 @@
 /// <binding />
 "use strict";
 
-var gulp = require("gulp"),
-  rimraf = require("rimraf"),
-  concat = require("gulp-concat"),
-  cssmin = require("gulp-cssmin"),
-  uglify = require("gulp-uglify");
+var gulp = require("gulp");
+  //rimraf = require("rimraf"),
+  //concat = require("gulp-concat"),
+  //cssmin = require("gulp-cssmin"),
+  //uglify = require("gulp-uglify");
 
 var exec = require('child_process').exec;
 
