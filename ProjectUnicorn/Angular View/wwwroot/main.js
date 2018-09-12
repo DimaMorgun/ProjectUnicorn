@@ -8,9 +8,13 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./components/pages/dashboard/dashboard.module": [
-		"./src/app/components/pages/dashboard/dashboard.module.ts",
-		"components-pages-dashboard-dashboard-module"
+	"./components/pages/dashboard-page/dashboard-page.module": [
+		"./src/app/components/pages/dashboard-page/dashboard-page.module.ts",
+		"components-pages-dashboard-page-dashboard-page-module"
+	],
+	"./components/pages/test-page/test-page.module": [
+		"./src/app/components/pages/test-page/test-page.module.ts",
+		"components-pages-test-page-test-page-module"
 	]
 };
 function webpackAsyncContext(req) {
@@ -48,6 +52,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _components_layouts_default_layout_default_layout_default_layout_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/layouts/default-layout/default-layout/default-layout.component */ "./src/app/components/layouts/default-layout/default-layout/default-layout.component.ts");
+/* harmony import */ var _components_layouts_test_layout_test_layout_test_layout_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/layouts/test-layout/test-layout/test-layout.component */ "./src/app/components/layouts/test-layout/test-layout/test-layout.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -57,9 +63,17 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 
 
 
+
+
+var selectedLayoutComponent = _components_layouts_default_layout_default_layout_default_layout_component__WEBPACK_IMPORTED_MODULE_3__["DefaultLayoutComponent"];
 var routes = [
-    { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-    { path: 'dashboard', loadChildren: './components/pages/dashboard/dashboard.module#DashboardModule' }
+    { path: '', redirectTo: 'dashboard', pathMatch: 'full', },
+    {
+        path: '', component: selectedLayoutComponent, children: [
+            { path: 'dashboard', loadChildren: './components/pages/dashboard-page/dashboard-page.module#DashboardPageModule' },
+            { path: 'test', loadChildren: './components/pages/test-page/test-page.module#TestPageModule' }
+        ]
+    }
 ];
 var AppRoutingModule = /** @class */ (function () {
     function AppRoutingModule() {
@@ -70,6 +84,7 @@ var AppRoutingModule = /** @class */ (function () {
                 _angular_common__WEBPACK_IMPORTED_MODULE_1__["CommonModule"],
                 _angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forRoot(routes, { useHash: false, enableTracing: false })
             ],
+            declarations: [_components_layouts_default_layout_default_layout_default_layout_component__WEBPACK_IMPORTED_MODULE_3__["DefaultLayoutComponent"], _components_layouts_test_layout_test_layout_test_layout_component__WEBPACK_IMPORTED_MODULE_4__["TestLayoutComponent"]],
             exports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"]],
         })
     ], AppRoutingModule);
@@ -143,7 +158,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<router-outlet></router-outlet>"
+module.exports = "<router-outlet></router-outlet>\r\n\r\n<hr>\r\n<h4>Select page</h4>\r\n<a routerLink=\"/dashboard\">Dashboard</a>\r\n&nbsp;&nbsp;&nbsp;\r\n<a routerLink=\"/test\">Test Page</a>\r\n<hr>\r\n<h4>Select Layout</h4>\r\n<button (click)=\"changeLayout(1)\">Default</button>\r\n&nbsp;&nbsp;&nbsp;\r\n<button (click)=\"changeLayout(2)\">Test</button>"
 
 /***/ }),
 
@@ -158,25 +173,172 @@ module.exports = "<router-outlet></router-outlet>"
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppComponent", function() { return AppComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _layouts_default_layout_default_layout_default_layout_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../layouts/default-layout/default-layout/default-layout.component */ "./src/app/components/layouts/default-layout/default-layout/default-layout.component.ts");
+/* harmony import */ var _layouts_test_layout_test_layout_test_layout_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../layouts/test-layout/test-layout/test-layout.component */ "./src/app/components/layouts/test-layout/test-layout/test-layout.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
 
 var AppComponent = /** @class */ (function () {
     function AppComponent() {
+        var _this = this;
         this.title = 'ProjectUnicornApp';
+        this.selectedLayout = _layouts_default_layout_default_layout_default_layout_component__WEBPACK_IMPORTED_MODULE_1__["DefaultLayoutComponent"];
+        this.changeLayout = function (layout) {
+            if (layout === 1 && _this.selectedLayout !== _layouts_default_layout_default_layout_default_layout_component__WEBPACK_IMPORTED_MODULE_1__["DefaultLayoutComponent"]) {
+                _this.selectedLayout = _layouts_default_layout_default_layout_default_layout_component__WEBPACK_IMPORTED_MODULE_1__["DefaultLayoutComponent"];
+            }
+            if (layout === 2 && _this.selectedLayout !== _layouts_test_layout_test_layout_test_layout_component__WEBPACK_IMPORTED_MODULE_2__["TestLayoutComponent"]) {
+                _this.selectedLayout = _layouts_test_layout_test_layout_test_layout_component__WEBPACK_IMPORTED_MODULE_2__["TestLayoutComponent"];
+            }
+            console.log(_this.selectedLayout);
+        };
     }
+    AppComponent.prototype.ngOnInit = function () {
+    };
     AppComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-root',
             template: __webpack_require__(/*! ./app.component.html */ "./src/app/components/app/app.component.html"),
             styles: [__webpack_require__(/*! ./app.component.css */ "./src/app/components/app/app.component.css")]
-        })
+        }),
+        __metadata("design:paramtypes", [])
     ], AppComponent);
     return AppComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/components/layouts/default-layout/default-layout/default-layout.component.css":
+/*!***********************************************************************************************!*\
+  !*** ./src/app/components/layouts/default-layout/default-layout/default-layout.component.css ***!
+  \***********************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ""
+
+/***/ }),
+
+/***/ "./src/app/components/layouts/default-layout/default-layout/default-layout.component.html":
+/*!************************************************************************************************!*\
+  !*** ./src/app/components/layouts/default-layout/default-layout/default-layout.component.html ***!
+  \************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<p>\n  default-layout works!\n</p>\n\n<router-outlet></router-outlet>\n\n<p>\n  end of default-layout!\n</p>"
+
+/***/ }),
+
+/***/ "./src/app/components/layouts/default-layout/default-layout/default-layout.component.ts":
+/*!**********************************************************************************************!*\
+  !*** ./src/app/components/layouts/default-layout/default-layout/default-layout.component.ts ***!
+  \**********************************************************************************************/
+/*! exports provided: DefaultLayoutComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DefaultLayoutComponent", function() { return DefaultLayoutComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var DefaultLayoutComponent = /** @class */ (function () {
+    function DefaultLayoutComponent() {
+    }
+    DefaultLayoutComponent.prototype.ngOnInit = function () {
+    };
+    DefaultLayoutComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-default-layout',
+            template: __webpack_require__(/*! ./default-layout.component.html */ "./src/app/components/layouts/default-layout/default-layout/default-layout.component.html"),
+            styles: [__webpack_require__(/*! ./default-layout.component.css */ "./src/app/components/layouts/default-layout/default-layout/default-layout.component.css")]
+        }),
+        __metadata("design:paramtypes", [])
+    ], DefaultLayoutComponent);
+    return DefaultLayoutComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/components/layouts/test-layout/test-layout/test-layout.component.css":
+/*!**************************************************************************************!*\
+  !*** ./src/app/components/layouts/test-layout/test-layout/test-layout.component.css ***!
+  \**************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ""
+
+/***/ }),
+
+/***/ "./src/app/components/layouts/test-layout/test-layout/test-layout.component.html":
+/*!***************************************************************************************!*\
+  !*** ./src/app/components/layouts/test-layout/test-layout/test-layout.component.html ***!
+  \***************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<p>\n  test-layout works!\n</p>\n\n<router-outlet></router-outlet>\n\n<p>\n  end of test-layout!\n</p>"
+
+/***/ }),
+
+/***/ "./src/app/components/layouts/test-layout/test-layout/test-layout.component.ts":
+/*!*************************************************************************************!*\
+  !*** ./src/app/components/layouts/test-layout/test-layout/test-layout.component.ts ***!
+  \*************************************************************************************/
+/*! exports provided: TestLayoutComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TestLayoutComponent", function() { return TestLayoutComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var TestLayoutComponent = /** @class */ (function () {
+    function TestLayoutComponent() {
+    }
+    TestLayoutComponent.prototype.ngOnInit = function () {
+    };
+    TestLayoutComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-test-layout',
+            template: __webpack_require__(/*! ./test-layout.component.html */ "./src/app/components/layouts/test-layout/test-layout/test-layout.component.html"),
+            styles: [__webpack_require__(/*! ./test-layout.component.css */ "./src/app/components/layouts/test-layout/test-layout/test-layout.component.css")]
+        }),
+        __metadata("design:paramtypes", [])
+    ], TestLayoutComponent);
+    return TestLayoutComponent;
 }());
 
 
