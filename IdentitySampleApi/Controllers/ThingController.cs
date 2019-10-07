@@ -1,10 +1,12 @@
 ﻿using IdentitySampleApi.BusinessLogicLayer.Interfaces;
 using IdentitySampleApi.DataTransferObjectLayer.DataTransferObjects;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
 namespace IdentitySampleApi.PresentationLayer.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ThingController : ControllerBase
@@ -15,7 +17,9 @@ namespace IdentitySampleApi.PresentationLayer.Controllers
         {
             _thingService = thingService;
         }
+
         // GET: api/Thing
+        [Authorize]
         [HttpGet]
         public IEnumerable<GetThingDTO> Get()
         {
