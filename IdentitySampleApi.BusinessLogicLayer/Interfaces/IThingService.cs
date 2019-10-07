@@ -6,11 +6,11 @@ namespace IdentitySampleApi.BusinessLogicLayer.Interfaces
 {
     public interface IThingService
     {
-        ThingDTO GetThing();
+        GetThingDTO GetThing();
         string GetThingJson();
-        List<ThingDTO> GetAllThing();
+        List<GetThingDTO> GetAllThing();
         string GetAllThingJson();
-        List<ThingDTO> GetThingRange(int skip, int take);
+        List<GetThingDTO> GetThingRange(int skip, int take);
         string GetThingRangeJson(int skip, int take);
     }
 }

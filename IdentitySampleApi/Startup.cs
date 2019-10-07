@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using IdentitySampleApi.BusinessLogicLayer.Interfaces;
+﻿using IdentitySampleApi.BusinessLogicLayer.Interfaces;
 using IdentitySampleApi.BusinessLogicLayer.Services;
+using IdentitySampleApi.DataAccessLayer.ApplicationContext;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,6 +14,9 @@ namespace IdentitySampleApi
     {
         public Startup(IConfiguration configuration)
         {
+
+
+
             Configuration = configuration;
         }
 
@@ -26,6 +26,9 @@ namespace IdentitySampleApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            string connectionString = Configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
+            services.AddDbContext<DefaultDatabaseContext>(options => options.UseSqlServer(connectionString));
 
             services.AddTransient<IThingService, ThingService>();
         }

@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IdentitySampleApi.BusinessLogicLayer\IdentitySampleApi.BusinessLogicLayer.csproj" />
+    <ProjectReference Include="..\IdentitySampleApi.DataAccessLayer\IdentitySampleApi.DataAccessLayer.csproj" />
   </ItemGroup>
 
 </Project>
