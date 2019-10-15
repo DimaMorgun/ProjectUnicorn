@@ -1,5 +1,4 @@
 ﻿using IdentitySampleApi.DataTransferObjectLayer.DataTransferObjects;
-
 using Newtonsoft.Json;
 using System.Collections.Generic;
 

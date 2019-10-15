@@ -1,10 +1,10 @@
 ﻿using IdentitySample.EntityLayer.Identity;
+using IdentitySampleApi.BusinessLogicLayer.DTO;
 using IdentitySampleApi.PresentationLayer.Entities;
-using IdentitySampleApi.PresentationLayer.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -21,62 +21,97 @@ namespace IdentitySampleApi.PresentationLayer.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private UserManager<User> _userManager;
-        private RoleManager<IdentityRole> _roleManager;
-        private SignInManager<User> _signInManager;
-        private AppSettings _appSettings;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
+        private readonly IConfiguration _configuration;
 
-        public AccountController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, SignInManager<User> signInManager, IOptions<AppSettings> appSettings)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _appSettings = appSettings.Value;
-            _roleManager = roleManager;
+            _configuration = configuration;
         }
 
         [AllowAnonymous]
-        [HttpPost("create", Name = "Create")]
-        public async Task<ActionResult> Post([FromBody]User userModel)
+        [HttpPost("register", Name = "Register")]
+        public async Task<ActionResult> Post([FromBody]CreateAccountRequestDTO createAccountDTO)
         {
-            string password = HttpContext.Request.Query["password"];
-            IdentityResult result = await _userManager.CreateAsync(userModel, password);
+            var appUser = new User();
+            appUser.UserName = createAccountDTO.UserName;
+            appUser.Email = createAccountDTO.UserName;
+            appUser.FirstName = createAccountDTO.FirstName;
+            appUser.LastName = createAccountDTO.LastName;
 
+            var response = new CreateAccountResponseDTO();
+
+            IdentityResult result = await _userManager.CreateAsync(appUser, createAccountDTO.PlainPassword);
             if (result.Succeeded)
             {
-                await _signInManager.SignInAsync(userModel, isPersistent: false);
+                await _signInManager.SignInAsync(appUser, false);
+
+                response.AccessToken = GenerateJwtToken(appUser.UserName, appUser);
+                response.RefreshToken = string.Empty;
+                response.Message.Add("Account created successfully.");
+                response.Message.Add("Signed in successfully.");
+                response.Status = true;
+
+                return Ok(response);
             }
 
-            return Ok(result);
+            response.Message = result.Errors.Select(prop => prop.Description).ToList();
+            response.Status = false;
+
+            return BadRequest(response);
         }
 
         [AllowAnonymous]
-        [HttpGet("signin", Name = "SignIn")]
-        public async Task<ActionResult> Get(string username, string password)
+        [HttpPost("signin", Name = "SignIn")]
+        public async Task<ActionResult> Post([FromBody]SignInAccountRequestDTO signInAccountDTO)
         {
-            User user = await _userManager.FindByEmailAsync(username);
-            if (user == null)
+            var response = new SignInAccountResponseDTO();
+
+            Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(signInAccountDTO.UserName, signInAccountDTO.PlainPassword, false, false);
+            if (result.Succeeded)
             {
-                return null;
+                var appUser = _userManager.Users.SingleOrDefault(r => r.Email == signInAccountDTO.UserName);
+                response.AccessToken = GenerateJwtToken(signInAccountDTO.UserName, appUser);
+                response.RefreshToken = string.Empty;
+                response.Message.Add("Signed in successfully.");
+                response.Status = true;
+
+                return Ok(response);
             }
-            IList<string> userRoles = await _userManager.GetRolesAsync(user);
 
-            // authentication successful so generate jwt token
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("THIS IS USED TO SIGN AND VERIFY JWT TOKENS, REPLACE IT WITH YOUR OWN SECRET, IT CAN BE ANY STRING");
-            var tokenDescriptor = new SecurityTokenDescriptor
+            response.Message.Add("Credentials are invalid.");
+            response.Status = false;
+
+            return BadRequest(response);
+        }
+
+        private string GenerateJwtToken(string email, IdentityUser user)
+        {
+            var claims = new List<Claim>
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, user.Id.ToString()),
-                    new Claim(ClaimTypes.Role, userRoles.FirstOrDefault())
-                }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                new Claim(JwtRegisteredClaimNames.Sub, email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.Id)
             };
-            SecurityToken securityToken = tokenHandler.CreateToken(tokenDescriptor);
-            string token = tokenHandler.WriteToken(securityToken);
 
-            return Ok(token);
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtConfigure:Secret"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var expires = DateTime.Now.AddDays(Convert.ToDouble(_configuration["JwtConfigure:ExpireDate"]));
+
+            JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(
+                _configuration["JwtConfigure:Issuer"],
+                _configuration["JwtConfigure:Issuer"],
+                claims,
+                expires: expires,
+                signingCredentials: creds
+            );
+
+            string accessToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+
+            return accessToken;
         }
 
         [Authorize(Roles = Role.Admin)]

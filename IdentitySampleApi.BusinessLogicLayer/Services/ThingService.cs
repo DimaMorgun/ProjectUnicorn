@@ -1,8 +1,7 @@
-﻿using IdentitySampleApi.BusinessLogicLayer.Helpers;
+﻿using IdentitySampleApi.BusinessLogicLayer.Extentions;
+using IdentitySampleApi.BusinessLogicLayer.Helpers;
 using IdentitySampleApi.BusinessLogicLayer.Interfaces;
 using IdentitySampleApi.DataTransferObjectLayer.DataTransferObjects;
-using IdentitySampleApi.BusinessLogicLayer.Extentions;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;

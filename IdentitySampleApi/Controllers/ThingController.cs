@@ -19,7 +19,6 @@ namespace IdentitySampleApi.PresentationLayer.Controllers
         }
 
         // GET: api/Thing
-        [Authorize]
         [HttpGet]
         public IEnumerable<GetThingDTO> Get()
         {

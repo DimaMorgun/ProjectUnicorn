@@ -29,11 +29,15 @@ namespace IdentitySampleApi
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            // configure jwt authentication
-            var key = Encoding.ASCII.GetBytes("THIS IS USED TO SIGN AND VERIFY JWT TOKENS, REPLACE IT WITH YOUR OWN SECRET, IT CAN BE ANY STRING");
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<DefaultDatabaseContext>()
+                .AddDefaultTokenProviders();
+
+            var key = Encoding.ASCII.GetBytes(Configuration["JwtConfigure:Secret"]);
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
             .AddJwtBearer(x =>
@@ -42,17 +46,15 @@ namespace IdentitySampleApi
                 x.SaveToken = true;
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
-                    ValidateAudience = false
+                    ValidateAudience = false,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+
                 };
             });
 
             string connectionString = Configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             services.AddDbContext<DefaultDatabaseContext>(options => options.UseSqlServer(connectionString));
-            services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<DefaultDatabaseContext>();
 
             services.AddTransient<IThingService, ThingService>();
         }
