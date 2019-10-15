@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using IdentitySampleApi.BusinessLogicLayer.Interfaces;
+﻿using IdentitySampleApi.BusinessLogicLayer.Interfaces;
 using IdentitySampleApi.DataTransferObjectLayer.DataTransferObjects;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace IdentitySampleApi.PresentationLayer.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ThingController : ControllerBase
@@ -19,11 +17,12 @@ namespace IdentitySampleApi.PresentationLayer.Controllers
         {
             _thingService = thingService;
         }
+
         // GET: api/Thing
         [HttpGet]
-        public IEnumerable<ThingDTO> Get()
+        public IEnumerable<GetThingDTO> Get()
         {
-            List<ThingDTO> thingDTOs = _thingService.GetAllThing();
+            List<GetThingDTO> thingDTOs = _thingService.GetAllThing();
 
             return thingDTOs;
         }

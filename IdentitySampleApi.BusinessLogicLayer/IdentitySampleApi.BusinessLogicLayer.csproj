@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\IdentitySampleApi.DataAccessLayer\IdentitySampleApi.DataAccessLayer.csproj" />
     <ProjectReference Include="..\IdentitySampleApi.DataTransferObjectLayer\IdentitySampleApi.DataTransferObjectLayer.csproj" />
   </ItemGroup>
 

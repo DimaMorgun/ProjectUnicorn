@@ -3,11 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29230.47
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentitySampleApi.PresentationLayer", "IdentitySampleApi\IdentitySampleApi.PresentationLayer.csproj", "{07BED4DD-CD39-4B5F-9A99-1108FDEFFB0A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentitySampleApi.PresentationLayer", "IdentitySampleApi\IdentitySampleApi.PresentationLayer.csproj", "{07BED4DD-CD39-4B5F-9A99-1108FDEFFB0A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentitySampleApi.BusinessLogicLayer", "IdentitySampleApi.BusinessLogicLayer\IdentitySampleApi.BusinessLogicLayer.csproj", "{5B3337BA-F334-4093-90BC-CB78FF3D7062}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentitySampleApi.BusinessLogicLayer", "IdentitySampleApi.BusinessLogicLayer\IdentitySampleApi.BusinessLogicLayer.csproj", "{5B3337BA-F334-4093-90BC-CB78FF3D7062}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentitySampleApi.DataTransferObjectLayer", "IdentitySampleApi.DataTransferObjectLayer\IdentitySampleApi.DataTransferObjectLayer.csproj", "{E8E87616-088F-4DA9-A4D5-CB81D8DB4F1B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentitySampleApi.DataTransferObjectLayer", "IdentitySampleApi.DataTransferObjectLayer\IdentitySampleApi.DataTransferObjectLayer.csproj", "{E8E87616-088F-4DA9-A4D5-CB81D8DB4F1B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentitySampleApi.DataAccessLayer", "IdentitySampleApi.DataAccessLayer\IdentitySampleApi.DataAccessLayer.csproj", "{7EA3969A-8B2C-4991-9646-3887218A5E10}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentitySample.EntityLayer", "IdentitySample.EntityLayer\IdentitySample.EntityLayer.csproj", "{AB998B8C-4070-4D4D-8334-0C2CED9B2DFD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +31,14 @@ Global
 		{E8E87616-088F-4DA9-A4D5-CB81D8DB4F1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E8E87616-088F-4DA9-A4D5-CB81D8DB4F1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E8E87616-088F-4DA9-A4D5-CB81D8DB4F1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EA3969A-8B2C-4991-9646-3887218A5E10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EA3969A-8B2C-4991-9646-3887218A5E10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EA3969A-8B2C-4991-9646-3887218A5E10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EA3969A-8B2C-4991-9646-3887218A5E10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB998B8C-4070-4D4D-8334-0C2CED9B2DFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB998B8C-4070-4D4D-8334-0C2CED9B2DFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB998B8C-4070-4D4D-8334-0C2CED9B2DFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB998B8C-4070-4D4D-8334-0C2CED9B2DFD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

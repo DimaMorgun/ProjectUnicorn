@@ -1,8 +1,7 @@
-﻿using IdentitySampleApi.BusinessLogicLayer.Helpers;
+﻿using IdentitySampleApi.BusinessLogicLayer.Extentions;
+using IdentitySampleApi.BusinessLogicLayer.Helpers;
 using IdentitySampleApi.BusinessLogicLayer.Interfaces;
 using IdentitySampleApi.DataTransferObjectLayer.DataTransferObjects;
-using IdentitySampleApi.BusinessLogicLayer.Extentions;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +10,7 @@ namespace IdentitySampleApi.BusinessLogicLayer.Services
 {
     public class ThingService : IThingService
     {
-        private List<ThingDTO> _thingDTOs;
+        private List<GetThingDTO> _thingDTOs;
 
         public ThingService()
         {
@@ -21,20 +20,20 @@ namespace IdentitySampleApi.BusinessLogicLayer.Services
             _thingDTOs = GetThingDTOs(thingCount, subThingCount);
         }
 
-        public ThingDTO GetThing()
+        public GetThingDTO GetThing()
         {
             return _thingDTOs.FirstOrDefault();
         }
 
         public string GetThingJson()
         {
-            ThingDTO thingDTO = GetThing();
+            GetThingDTO thingDTO = GetThing();
             string json = thingDTO.GetObjectJson();
 
             return json;
         }
 
-        public List<ThingDTO> GetAllThing()
+        public List<GetThingDTO> GetAllThing()
         {
             return _thingDTOs;
         }
@@ -46,28 +45,28 @@ namespace IdentitySampleApi.BusinessLogicLayer.Services
             return json;
         }
 
-        public List<ThingDTO> GetThingRange(int skip, int take)
+        public List<GetThingDTO> GetThingRange(int skip, int take)
         {
-            List<ThingDTO> thingDTOs = _thingDTOs.Skip(skip).Take(take).ToList();
+            List<GetThingDTO> thingDTOs = _thingDTOs.Skip(skip).Take(take).ToList();
 
             return thingDTOs;
         }
 
         public string GetThingRangeJson(int skip, int take)
         {
-            List<ThingDTO> thingDTOs = GetThingRange(skip, take);
+            List<GetThingDTO> thingDTOs = GetThingRange(skip, take);
             string json = thingDTOs.GetObjectJson();
 
             return json;
         }
 
-        private List<ThingDTO> GetThingDTOs(int thingDTOsCount = 1, int subThingDTOsCount = 1)
+        private List<GetThingDTO> GetThingDTOs(int thingDTOsCount = 1, int subThingDTOsCount = 1)
         {
-            var thingDTOs = new List<ThingDTO>();
+            var thingDTOs = new List<GetThingDTO>();
 
             for (int i = 0; i < thingDTOsCount; i++)
             {
-                var thingDto = new ThingDTO();
+                var thingDto = new GetThingDTO();
                 thingDto.Id = Guid.NewGuid();
                 thingDto.Name = $"Name #{i}";
                 thingDto.Description = $"TO{new string('O', i)} MUCH LONG DESCRIPTION #{i}.";
@@ -80,13 +79,13 @@ namespace IdentitySampleApi.BusinessLogicLayer.Services
             return thingDTOs;
         }
 
-        private List<SubThingDTO> GetSubThingDTOs(int subThingDTOsCount = 1)
+        private List<GetThingDTOSubThingDTOViewItem> GetSubThingDTOs(int subThingDTOsCount = 1)
         {
-            var subThingDTOs = new List<SubThingDTO>();
+            var subThingDTOs = new List<GetThingDTOSubThingDTOViewItem>();
 
             for (int i = 0; i < subThingDTOsCount; i++)
             {
-                var subThingDto = new SubThingDTO();
+                var subThingDto = new GetThingDTOSubThingDTOViewItem();
                 subThingDto.Id = Guid.NewGuid();
                 subThingDto.Name = $"Name #{i}";
                 subThingDto.Description = $"TO{new string('O', i)} MUCH LONG DESCRIPTION #{i}.";
