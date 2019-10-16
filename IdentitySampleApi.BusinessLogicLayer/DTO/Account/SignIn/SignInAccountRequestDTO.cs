@@ -1,4 +1,4 @@
-﻿namespace IdentitySampleApi.BusinessLogicLayer.DTO
+﻿namespace IdentitySampleApi.BusinessLogicLayer.DTO.Account.SignIn
 {
     public class SignInAccountRequestDTO
     {

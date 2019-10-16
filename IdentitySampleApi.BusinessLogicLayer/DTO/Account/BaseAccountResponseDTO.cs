@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 
-namespace IdentitySampleApi.BusinessLogicLayer.DTO
+namespace IdentitySampleApi.BusinessLogicLayer.DTO.Account
 {
-    public abstract class BaseResponseDTO
+    public abstract class BaseAccountResponseDTO
     {
         public List<string> Message { get; set; }
         public bool Status { get; set; }
 
-        public BaseResponseDTO()
+        public BaseAccountResponseDTO()
         {
             Message = new List<string>();
         }

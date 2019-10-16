@@ -1,6 +1,7 @@
 ﻿using IdentitySample.EntityLayer.Identity;
-using IdentitySampleApi.BusinessLogicLayer.DTO;
-using IdentitySampleApi.PresentationLayer.Entities;
+using IdentitySampleApi.BusinessLogicLayer.DTO.Account.Create;
+using IdentitySampleApi.BusinessLogicLayer.DTO.Account.SignIn;
+using IdentitySampleApi.BusinessLogicLayer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -33,7 +34,7 @@ namespace IdentitySampleApi.PresentationLayer.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("register", Name = "Register")]
+        [HttpPost("Register", Name = "Register")]
         public async Task<ActionResult> Post([FromBody]CreateAccountRequestDTO createAccountDTO)
         {
             var appUser = new User();
@@ -44,13 +45,25 @@ namespace IdentitySampleApi.PresentationLayer.Controllers
 
             var response = new CreateAccountResponseDTO();
 
+            string scheme = HttpContext.Request.Scheme;
+            string callbackUrl = Url.RouteUrl("Post", "Account", null, scheme);
+            callbackUrl = Url.Action("Post", "Account", null, scheme);
+
             IdentityResult result = await _userManager.CreateAsync(appUser, createAccountDTO.PlainPassword);
             if (result.Succeeded)
             {
-                await _signInManager.SignInAsync(appUser, false);
+                var accessTokenPayload = new JWTAccessTokenPayloadModel();
+                accessTokenPayload.UniqueId = Guid.NewGuid().ToString();
+                accessTokenPayload.UserId = appUser.Id;
+                accessTokenPayload.UserName = appUser.UserName;
+                accessTokenPayload.UserRoles = await _userManager.GetRolesAsync(appUser);
+                response.AccessToken = GetAccessToken(accessTokenPayload);
 
-                response.AccessToken = GenerateJwtToken(appUser.UserName, appUser);
-                response.RefreshToken = string.Empty;
+                var refreshTokenPayload = new JWTRefreshTokenPayloadModel();
+                refreshTokenPayload.UniqueId = Guid.NewGuid().ToString();
+                refreshTokenPayload.AccessToken = response.AccessToken;
+                response.RefreshToken = GetRefreshToken(refreshTokenPayload);
+
                 response.Message.Add("Account created successfully.");
                 response.Message.Add("Signed in successfully.");
                 response.Status = true;
@@ -65,7 +78,7 @@ namespace IdentitySampleApi.PresentationLayer.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("signin", Name = "SignIn")]
+        [HttpPost("SignIn", Name = "SignIn")]
         public async Task<ActionResult> Post([FromBody]SignInAccountRequestDTO signInAccountDTO)
         {
             var response = new SignInAccountResponseDTO();
@@ -73,9 +86,20 @@ namespace IdentitySampleApi.PresentationLayer.Controllers
             Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(signInAccountDTO.UserName, signInAccountDTO.PlainPassword, false, false);
             if (result.Succeeded)
             {
-                var appUser = _userManager.Users.SingleOrDefault(r => r.Email == signInAccountDTO.UserName);
-                response.AccessToken = GenerateJwtToken(signInAccountDTO.UserName, appUser);
-                response.RefreshToken = string.Empty;
+                User appUser = _userManager.Users.SingleOrDefault(r => r.Email == signInAccountDTO.UserName);
+
+                var accessTokenPayload = new JWTAccessTokenPayloadModel();
+                accessTokenPayload.UniqueId = Guid.NewGuid().ToString();
+                accessTokenPayload.UserId = appUser.Id;
+                accessTokenPayload.UserName = appUser.UserName;
+                accessTokenPayload.UserRoles = await _userManager.GetRolesAsync(appUser);
+                response.AccessToken = GetAccessToken(accessTokenPayload);
+
+                var refreshTokenPayload = new JWTRefreshTokenPayloadModel();
+                refreshTokenPayload.UniqueId = Guid.NewGuid().ToString();
+                refreshTokenPayload.AccessToken = response.AccessToken;
+                response.RefreshToken = GetRefreshToken(refreshTokenPayload);
+
                 response.Message.Add("Signed in successfully.");
                 response.Status = true;
 
@@ -88,18 +112,20 @@ namespace IdentitySampleApi.PresentationLayer.Controllers
             return BadRequest(response);
         }
 
-        private string GenerateJwtToken(string email, IdentityUser user)
+        private string GetAccessToken(JWTAccessTokenPayloadModel payload)
         {
-            var claims = new List<Claim>
+            var claims = new List<Claim>();
+            claims.Add(new Claim(JwtRegisteredClaimNames.Jti, payload.UniqueId));
+            claims.Add(new Claim(JwtRegisteredClaimNames.Sub, payload.UserName));
+            claims.Add(new Claim(ClaimTypes.NameIdentifier, payload.UserId));
+            foreach (string role in payload.UserRoles)
             {
-                new Claim(JwtRegisteredClaimNames.Sub, email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.NameIdentifier, user.Id)
-            };
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtConfigure:Secret"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.Now.AddDays(Convert.ToDouble(_configuration["JwtConfigure:ExpireDate"]));
+            var expires = DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["JwtConfigure:AccessTokenExpireDate"]));
 
             JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(
                 _configuration["JwtConfigure:Issuer"],
@@ -114,11 +140,34 @@ namespace IdentitySampleApi.PresentationLayer.Controllers
             return accessToken;
         }
 
-        [Authorize(Roles = Role.Admin)]
-        [HttpGet("signout", Name = "SignOut")]
-        public IActionResult GetAll()
+        private string GetRefreshToken(JWTRefreshTokenPayloadModel payload)
         {
-            return Ok("Logged in with role Admin");
+            var claims = new List<Claim>();
+            claims.Add(new Claim(JwtRegisteredClaimNames.Jti, payload.UniqueId));
+            claims.Add(new Claim(JwtRegisteredClaimNames.Sub, payload.AccessToken));
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtConfigure:Secret"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var expires = DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["JwtConfigure:RefreshTokenExpireDate"]));
+
+            JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(
+                _configuration["JwtConfigure:Issuer"],
+                _configuration["JwtConfigure:Issuer"],
+                claims,
+                expires: expires,
+                signingCredentials: creds
+            );
+
+            string accessToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+
+            return accessToken;
+        }
+
+        [Authorize(Roles = Entities.Role.Admin)]
+        [HttpGet("SignOut", Name = "SignOut")]
+        public IActionResult Get()
+        {
+            return Ok("Signed out with role Admin");
         }
     }
 }
