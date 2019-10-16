@@ -1,6 +1,9 @@
-﻿namespace IdentitySample.EntityLayer.Identity
+﻿using Microsoft.AspNetCore.Identity;
+using System;
+
+namespace IdentitySample.EntityLayer.Identity
 {
-    public class Role
+    public class Role : IdentityRole
     {
     }
 }
