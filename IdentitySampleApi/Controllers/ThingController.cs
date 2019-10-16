@@ -28,10 +28,11 @@ namespace IdentitySampleApi.PresentationLayer.Controllers
         }
 
         // GET: api/Thing/5
+        [Authorize(Roles = Entities.Role.Admin)]
         [HttpGet("{id}", Name = "Get")]
         public string Get(int id)
         {
-            return "value";
+            return $"Removed element with id={id}";
         }
 
         // POST: api/Thing
