@@ -165,11 +165,9 @@ namespace IdentitySampleApi.PresentationLayer.Controllers
 
         [Authorize(Roles = Entities.Role.Admin)]
         [HttpGet("SignOut", Name = "SignOut")]
-        public async Task<IActionResult> Get()
+        public IActionResult Get()
         {
-            await _signInManager.SignOutAsync();
-
-            return Ok("Logged in with role Admin");
+            return Ok("Signed out with role Admin");
         }
     }
 }
