@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace IdentitySampleApi.DataAccessLayer.Migrations
 {
-    public partial class AddedIdentty : Migration
+    public partial class Addedmanytomany : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -47,6 +47,30 @@ namespace IdentitySampleApi.DataAccessLayer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "multipleAss",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Value = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_multipleAss", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "multipleBss",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Value = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_multipleBss", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -172,6 +196,30 @@ namespace IdentitySampleApi.DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "MultipleAInMultipleBs",
+                columns: table => new
+                {
+                    AssId = table.Column<Guid>(nullable: false),
+                    BssId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MultipleAInMultipleBs", x => new { x.AssId, x.BssId });
+                    table.ForeignKey(
+                        name: "FK_MultipleAInMultipleBs_multipleAss_AssId",
+                        column: x => x.AssId,
+                        principalTable: "multipleAss",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MultipleAInMultipleBs_multipleBss_BssId",
+                        column: x => x.BssId,
+                        principalTable: "multipleBss",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SubThing",
                 columns: table => new
                 {
@@ -233,6 +281,11 @@ namespace IdentitySampleApi.DataAccessLayer.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MultipleAInMultipleBs_BssId",
+                table: "MultipleAInMultipleBs",
+                column: "BssId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SubThing_ThingId",
                 table: "SubThing",
                 column: "ThingId");
@@ -256,6 +309,9 @@ namespace IdentitySampleApi.DataAccessLayer.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "MultipleAInMultipleBs");
+
+            migrationBuilder.DropTable(
                 name: "SubThing");
 
             migrationBuilder.DropTable(
@@ -263,6 +319,12 @@ namespace IdentitySampleApi.DataAccessLayer.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "multipleAss");
+
+            migrationBuilder.DropTable(
+                name: "multipleBss");
 
             migrationBuilder.DropTable(
                 name: "Thing");

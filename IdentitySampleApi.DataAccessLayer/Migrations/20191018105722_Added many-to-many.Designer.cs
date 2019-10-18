@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IdentitySampleApi.DataAccessLayer.Migrations
 {
     [DbContext(typeof(DefaultDatabaseContext))]
-    [Migration("20191010135657_Removed role property from user identity entity")]
-    partial class Removedrolepropertyfromuseridentityentity
+    [Migration("20191018105722_Added many-to-many")]
+    partial class Addedmanytomany
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,43 @@ namespace IdentitySampleApi.DataAccessLayer.Migrations
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("IdentitySample.EntityLayer.Entities.MultipleA", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("multipleAss");
+                });
+
+            modelBuilder.Entity("IdentitySample.EntityLayer.Entities.MultipleAInMultipleB", b =>
+                {
+                    b.Property<Guid>("AssId");
+
+                    b.Property<Guid>("BssId");
+
+                    b.HasKey("AssId", "BssId");
+
+                    b.HasIndex("BssId");
+
+                    b.ToTable("MultipleAInMultipleBs");
+                });
+
+            modelBuilder.Entity("IdentitySample.EntityLayer.Entities.MultipleB", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("multipleBss");
+                });
 
             modelBuilder.Entity("IdentitySample.EntityLayer.Entities.SubThing", b =>
                 {
@@ -226,6 +263,19 @@ namespace IdentitySampleApi.DataAccessLayer.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("IdentitySample.EntityLayer.Entities.MultipleAInMultipleB", b =>
+                {
+                    b.HasOne("IdentitySample.EntityLayer.Entities.MultipleA", "Ass")
+                        .WithMany("multipleAInMultipleBs")
+                        .HasForeignKey("AssId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("IdentitySample.EntityLayer.Entities.MultipleB", "Bss")
+                        .WithMany("multipleAInMultipleBs")
+                        .HasForeignKey("BssId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("IdentitySample.EntityLayer.Entities.SubThing", b =>
