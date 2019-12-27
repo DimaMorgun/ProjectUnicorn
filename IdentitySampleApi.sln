@@ -9,9 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentitySampleApi.BusinessL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentitySampleApi.DataTransferObjectLayer", "IdentitySampleApi.DataTransferObjectLayer\IdentitySampleApi.DataTransferObjectLayer.csproj", "{E8E87616-088F-4DA9-A4D5-CB81D8DB4F1B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentitySampleApi.DataAccessLayer", "IdentitySampleApi.DataAccessLayer\IdentitySampleApi.DataAccessLayer.csproj", "{7EA3969A-8B2C-4991-9646-3887218A5E10}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentitySampleApi.DataAccessLayer", "IdentitySampleApi.DataAccessLayer\IdentitySampleApi.DataAccessLayer.csproj", "{7EA3969A-8B2C-4991-9646-3887218A5E10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentitySample.EntityLayer", "IdentitySample.EntityLayer\IdentitySample.EntityLayer.csproj", "{AB998B8C-4070-4D4D-8334-0C2CED9B2DFD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentitySample.EntityLayer", "IdentitySample.EntityLayer\IdentitySample.EntityLayer.csproj", "{AB998B8C-4070-4D4D-8334-0C2CED9B2DFD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentitySample", "IdentitySample", "{8E5D7DD0-8A5A-4037-A6BC-CC1AD03BB139}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EducationApp.Framework", "EducationApp.Framework\EducationApp.Framework.csproj", "{3779FE60-0877-4416-A1BD-9A5910EB1A5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,9 +43,20 @@ Global
 		{AB998B8C-4070-4D4D-8334-0C2CED9B2DFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB998B8C-4070-4D4D-8334-0C2CED9B2DFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB998B8C-4070-4D4D-8334-0C2CED9B2DFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3779FE60-0877-4416-A1BD-9A5910EB1A5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3779FE60-0877-4416-A1BD-9A5910EB1A5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3779FE60-0877-4416-A1BD-9A5910EB1A5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3779FE60-0877-4416-A1BD-9A5910EB1A5E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{07BED4DD-CD39-4B5F-9A99-1108FDEFFB0A} = {8E5D7DD0-8A5A-4037-A6BC-CC1AD03BB139}
+		{5B3337BA-F334-4093-90BC-CB78FF3D7062} = {8E5D7DD0-8A5A-4037-A6BC-CC1AD03BB139}
+		{E8E87616-088F-4DA9-A4D5-CB81D8DB4F1B} = {8E5D7DD0-8A5A-4037-A6BC-CC1AD03BB139}
+		{7EA3969A-8B2C-4991-9646-3887218A5E10} = {8E5D7DD0-8A5A-4037-A6BC-CC1AD03BB139}
+		{AB998B8C-4070-4D4D-8334-0C2CED9B2DFD} = {8E5D7DD0-8A5A-4037-A6BC-CC1AD03BB139}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {05647326-1BBF-41CE-9DAC-534FDDF2D7F7}
